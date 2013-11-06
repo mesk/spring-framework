@@ -374,6 +374,13 @@ public class OperatorTests extends ExpressionTestCase {
 		evaluate("3L * 50L", 150L, Long.class);
 		evaluate("3L + 50L", 53L, Long.class);
 		evaluate("3L - 50L", -47L, Long.class);
+		evaluate("3L or 1L", 3L, Long.class);
+		evaluate("6L or 2L", 6L, Long.class);
+		evaluate("3L and 1L", 1L, Long.class);
+		evaluate("6L and 2L", 2L, Long.class);
+		evaluate("!3L", -4L, Long.class);
+		evaluate("!6L", -7L, Long.class);
+		evaluate("((3L and 1L) != 0)", true, Boolean.class);
 	}
 
 	// ---

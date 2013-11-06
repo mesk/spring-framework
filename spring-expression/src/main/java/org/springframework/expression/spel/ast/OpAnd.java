@@ -39,6 +39,15 @@ public class OpAnd extends Operator {
 
 	@Override
 	public TypedValue getValueInternal(ExpressionState state) throws EvaluationException {
+		TypedValue leftTypedValue = getLeftOperand().getValueInternal(state);
+		TypedValue rightTypedValue = getRightOperand().getValueInternal(state);
+		Object operandOne = leftTypedValue.getValue();
+		Object operandTwo = rightTypedValue.getValue();
+		if (operandOne instanceof Number && operandTwo instanceof Number) {
+			Number op1 = (Number) operandOne;
+			Number op2 = (Number) operandTwo;
+			return new TypedValue(op1.longValue() & op2.longValue());
+		}
 		if (getBooleanValue(state, getLeftOperand()) == false) {
 			// no need to evaluate right operand
 			return BooleanTypedValue.FALSE;

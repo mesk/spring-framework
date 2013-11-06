@@ -17,6 +17,7 @@
 package org.springframework.expression.spel.ast;
 
 import org.springframework.expression.EvaluationException;
+import org.springframework.expression.TypedValue;
 import org.springframework.expression.spel.ExpressionState;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.SpelMessage;
@@ -37,7 +38,16 @@ public class OpOr extends Operator {
 	}
 
 	@Override
-	public BooleanTypedValue getValueInternal(ExpressionState state) throws EvaluationException {
+	public TypedValue getValueInternal(ExpressionState state) throws EvaluationException {
+		TypedValue leftTypedValue = getLeftOperand().getValueInternal(state);
+		TypedValue rightTypedValue = getRightOperand().getValueInternal(state);
+		Object operandOne = leftTypedValue.getValue();
+		Object operandTwo = rightTypedValue.getValue();
+		if (operandOne instanceof Number && operandTwo instanceof Number) {
+			Number op1 = (Number) operandOne;
+			Number op2 = (Number) operandTwo;
+			return new TypedValue(op1.longValue() | op2.longValue());
+		}
 		if (getBooleanValue(state, getLeftOperand())) {
 			// no need to evaluate right operand
 			return BooleanTypedValue.TRUE;
